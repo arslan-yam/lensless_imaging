@@ -1,0 +1,16 @@
+device: "auto"
+train: # metrics that are calculated during training
+  - _target_: src.metrics.PSNRMetric
+    name: "PSNRMetric"
+  - _target_: src.metrics.SSIMMetric
+    name: "SSIMMetric"
+inference: # metrics that are calculated during inference (eval)
+  - _target_: src.metrics.PSNRMetric
+    name: "PSNRMetric"
+  - _target_: src.metrics.SSIMMetric
+    name: "SSIMMetric"
+  - _target_: src.metrics.MSEMetric
+    name: "MSEMetric"
+  - _target_: src.metrics.LPIPSMetric
+    device: ${metrics.device}
+    name: "LPIPSMetric"

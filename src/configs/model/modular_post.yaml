@@ -1,0 +1,7 @@
+_target_: src.model.LenslessReconstructor
+n_iters: 5
+admm_trainable: true
+post_processor:
+  _target_: src.model.DRUNet
+  channels: [32, 64, 128, 256]
+  n_blocks: 4

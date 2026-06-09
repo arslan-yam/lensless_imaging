@@ -1,0 +1,4 @@
+test:
+  _target_: src.datasets.CustomDirDataset
+  path: "data/custom_test"
+  limit: null

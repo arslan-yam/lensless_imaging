@@ -1,0 +1,8 @@
+train:
+  _target_: src.datasets.DigiCamDataset
+  split: "train"
+  limit: null
+test:
+  _target_: src.datasets.DigiCamDataset
+  split: "test"
+  limit: 100

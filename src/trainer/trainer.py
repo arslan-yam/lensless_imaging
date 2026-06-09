@@ -1,5 +1,14 @@
 from src.metrics.tracker import MetricTracker
 from src.trainer.base_trainer import BaseTrainer
+import torch
+
+
+def to_image(tensor, normalize=False):
+    image = tensor.detach().cpu().float()
+    if normalize:
+        image = image / (image.amax() + 1e-8)
+    image = (image.clamp(0, 1) * 255).to(torch.uint8)
+    return image.permute(1, 2, 0).numpy()
 
 
 class Trainer(BaseTrainer):
@@ -67,13 +76,7 @@ class Trainer(BaseTrainer):
             mode (str): train or inference. Defines which logging
                 rules to apply.
         """
-        # method to log data from you batch
-        # such as audio, text or images, for example
-
-        # logging scheme might be different for different partitions
-        if mode == "train":  # the method is called only every self.log_step steps
-            # Log Stuff
-            pass
-        else:
-            # Log Stuff
-            pass
+        self.writer.add_image("lensless", to_image(batch["lensless"][0], normalize=True))
+        self.writer.add_image("reconstruction", to_image(batch["reconstruction"][0]))
+        if "lensed" in batch:
+            self.writer.add_image("lensed", to_image(batch["lensed"][0]))

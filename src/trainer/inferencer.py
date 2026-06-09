@@ -1,5 +1,7 @@
 import torch
 from tqdm.auto import tqdm
+from torchvision.utils import save_image
+import time
 
 from src.metrics.tracker import MetricTracker
 from src.trainer.base_trainer import BaseTrainer
@@ -90,7 +92,10 @@ class Inferencer(BaseTrainer):
         """
         part_logs = {}
         for part, dataloader in self.evaluation_dataloaders.items():
+            self.inference_times = []
             logs = self._inference_part(part, dataloader)
+            if self.inference_times:
+                logs["sec_per_image"] = sum(self.inference_times) / len(self.inference_times)
             part_logs[part] = logs
         return part_logs
 
@@ -119,37 +124,28 @@ class Inferencer(BaseTrainer):
         batch = self.move_batch_to_device(batch)
         batch = self.transform_batch(batch)  # transform batch on device -- faster
 
+        cuda = isinstance(self.device, str) and self.device.startswith("cuda")
+        if cuda:
+            torch.cuda.synchronize()
+        start = time.perf_counter()
         outputs = self.model(**batch)
+        if cuda:
+            torch.cuda.synchronize()
+        elapsed = time.perf_counter() - start
         batch.update(outputs)
 
-        if metrics is not None:
+        reconstruction = batch["reconstruction"]
+        self.inference_times.append(elapsed / reconstruction.shape[0])
+
+        if metrics is not None and "lensed" in batch:
             for met in self.metrics["inference"]:
                 metrics.update(met.name, met(**batch))
 
-        # Some saving logic. This is an example
-        # Use if you need to save predictions on disk
-
-        batch_size = batch["logits"].shape[0]
-        current_id = batch_idx * batch_size
-
-        for i in range(batch_size):
-            # clone because of
-            # https://github.com/pytorch/pytorch/issues/1995
-            logits = batch["logits"][i].clone()
-            label = batch["labels"][i].clone()
-            pred_label = logits.argmax(dim=-1)
-
-            output_id = current_id + i
-
-            output = {
-                "pred_label": pred_label,
-                "label": label,
-            }
-
+        names = batch.get("name")
+        for i in range(reconstruction.shape[0]):
+            name = names[i] if names is not None else f"{batch_idx:04d}_{i}"
             if self.save_path is not None:
-                # you can use safetensors or other lib here
-                torch.save(output, self.save_path / part / f"output_{output_id}.pth")
-
+                save_image(reconstruction[i].detach().cpu(), self.save_path / part / f"{name}.png")
         return batch
 
     def _inference_part(self, part, dataloader):

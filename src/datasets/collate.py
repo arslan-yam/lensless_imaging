@@ -15,11 +15,11 @@ def collate_fn(dataset_items: list[dict]):
     """
 
     result_batch = {}
-
-    # example of collate_fn
-    result_batch["data_object"] = torch.vstack(
-        [elem["data_object"] for elem in dataset_items]
-    )
-    result_batch["labels"] = torch.tensor([elem["labels"] for elem in dataset_items])
+    for key in dataset_items[0].keys():
+        values = [item[key] for item in dataset_items]
+        if torch.is_tensor(values[0]):
+            result_batch[key] = torch.stack(values)
+        else:
+            result_batch[key] = values
 
     return result_batch

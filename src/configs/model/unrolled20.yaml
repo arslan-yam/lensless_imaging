@@ -1,0 +1,3 @@
+_target_: src.model.LenslessReconstructor
+n_iters: 20
+admm_trainable: true
