@@ -1,8 +1,10 @@
+import logging
 import warnings
 
 import hydra
 import torch
 from hydra.utils import instantiate
+from omegaconf import OmegaConf
 
 from src.datasets.data_utils import get_dataloaders
 from src.trainer import Inferencer
@@ -59,7 +61,12 @@ def main(config):
 
     logs = inferencer.run_inference()
 
+    writer = instantiate(
+        config.writer, logging.getLogger("inference"), OmegaConf.to_container(config)
+    )
     for part in logs.keys():
+        writer.set_step(0, part)
+        writer.add_scalars(logs[part])
         for key, value in logs[part].items():
             full_key = part + "_" + key
             print(f"    {full_key:15s}: {value}")

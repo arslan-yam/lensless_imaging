@@ -1,5 +1,6 @@
 defaults:
   - model: unrolled20
+  - writer: cometml
   - metrics: lensless
   - datasets: custom_dir
   - dataloader: lensless
@@ -11,3 +12,7 @@ inferencer:
   save_path: "reconstructions" # subdir of data/saved with predictions
   seed: 1
   from_pretrained: "saved/model_best.pth" # null to run a parameter-free model (ADMM-100)
+writer:
+  run_name: ${inferencer.save_path}
+trainer:
+  resume_from: null # the Comet writer reads this key
