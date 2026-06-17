@@ -1,0 +1,5 @@
+_target_: src.model.LenslessReconstructor
+solver:
+  _target_: src.model.FISTA
+  n_iters: 20
+  trainable: true

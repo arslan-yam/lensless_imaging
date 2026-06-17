@@ -1,15 +1,15 @@
 import torch
 from torch import nn
-
 from src.model.admm import LeADMM
 
 
 class LenslessReconstructor(nn.Module):
-    def __init__(self, n_iters=5, admm_trainable=True, pre_processor=None, post_processor=None,
-        mu1=1e-4, mu2=1e-4, mu3=1e-4, tau=2e-4):
+    def __init__(self, n_iters=5, admm_trainable=True, pre_processor=None, post_processor=None, mu1=1e-4, mu2=1e-4, mu3=1e-4, tau=2e-4, solver=None):
         super().__init__()
         self.pre_processor = pre_processor
-        self.admm = LeADMM(n_iters=n_iters, trainable=admm_trainable, mu1=mu1, mu2=mu2, mu3=mu3, tau=tau)
+        if solver is None:
+            solver = LeADMM(n_iters=n_iters, trainable=admm_trainable, mu1=mu1, mu2=mu2, mu3=mu3, tau=tau)
+        self.admm = solver
         self.post_processor = post_processor
 
     def forward(self, lensless, psf, **batch):
