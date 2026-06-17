@@ -19,5 +19,6 @@ class RealESRGAN(nn.Module):
     def forward(self, x):
         h, w = x.shape[-2:]
         x = x / (x.amax(dim=(-3, -2, -1), keepdim=True) + 1e-8)
+        x = F.interpolate(x, size=(h // 4, w // 4), mode="bilinear", align_corners=False)
         out = self.net(x)
         return F.interpolate(out, size=(h, w), mode="bilinear", align_corners=False)

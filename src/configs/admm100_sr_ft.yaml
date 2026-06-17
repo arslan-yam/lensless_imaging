@@ -16,7 +16,7 @@ lr_scheduler:
 loss_function:
   _target_: src.loss.LenslessLoss
 dataloader:
-  batch_size: 2
+  batch_size: 4
 writer:
   run_name: "admm100_sr_ft"
 trainer:
