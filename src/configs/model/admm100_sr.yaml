@@ -1,0 +1,7 @@
+_target_: src.model.LenslessReconstructor
+n_iters: 100
+admm_trainable: false
+post_processor:
+  _target_: src.model.RealESRGAN
+  pretrained: true
+  frozen: true
