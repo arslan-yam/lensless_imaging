@@ -1,15 +1,14 @@
 import argparse
 from pathlib import Path
-
 import gdown
 
-# Google Drive file ids for each trained checkpoint.
-# Fill these in after uploading the trained model_best.pth files.
 CHECKPOINTS = {
-    "unrolled20": None,
-    "modular_prepost": None,
-    "modular_pre": None,
-    "modular_post": None,
+    "unrolled20": "1YlikM_FETV_s8LwT8v-zV--dZqCR2lcL",
+    "modular_prepost": "18i4-3Sb5zqrdKVhE72NMyvIhOgSxwsY2",
+    "modular_pre": "1aEeT9QZOjuqOA4LXeAH2_LT8VExJ7QqL",
+    "modular_post": "199p_SAbgD0-UgQ66oVO9kVpzl4498U1k",
+    "fista_unrolled": "1L8EYTaAvKuOw3QB1WN0TOIhP52KrFSpi",
+    "admm_100_sr_ft": "1c1VBP2zzZ5F3V1vSgs5vetIRCJJJckvU"
 }
 
 
