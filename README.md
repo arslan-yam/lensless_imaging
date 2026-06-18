@@ -120,6 +120,12 @@ python calculate_metrics.py \
 
 Download trained checkpoints with [`scripts/download_checkpoints.py`](scripts/download_checkpoints.py).
 
+```bash
+python scripts/download_checkpoints.py
+```
+
+Available checkpoints: unrolled20, modular_prepost, modular_pre, modular_post, fista_unrolled, admm_100_sr_ft.
+
 ## Credits
 
 Built on the [pytorch_project_template](https://github.com/Blinorot/pytorch_project_template). The lensless forward model and simulation use helpers based on [LenslessPiCam](https://github.com/LCAV/LenslessPiCam) / [waveprop](https://github.com/ebezzam/waveprop).
