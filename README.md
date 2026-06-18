@@ -120,21 +120,6 @@ python calculate_metrics.py \
 
 Download trained checkpoints with [`scripts/download_checkpoints.py`](scripts/download_checkpoints.py).
 
-## Results
-
-Metrics on the DigiCam test split
-
-| Method                              | psnr ↑ | ssim ↑ | mse ↓ | lpips ↓ | sec/img ↓ |
-| ----------------------------------- | ------ | ------ | ----- | ------- | --------- |
-| admm-100                            |        |        |       |         |           |
-| Unrolled admm-20                    |        |        |       |         |           |
-| modular (pre + post)                |        |        |       |         |           |
-| modular (pre)                       |        |        |       |         |           |
-| modular (post)                      |        |        |       |         |           |
-| fista-100                           |        |        |       |         |           |
-| admm-100 + real-esrgan (frozen)     |        |        |       |         |           |
-| admm-100 + real-esrgan (fine-tuned) |        |        |       |         |           |
-
 ## Credits
 
 Built on the [pytorch_project_template](https://github.com/Blinorot/pytorch_project_template). The lensless forward model and simulation use helpers based on [LenslessPiCam](https://github.com/LCAV/LenslessPiCam) / [waveprop](https://github.com/ebezzam/waveprop).
